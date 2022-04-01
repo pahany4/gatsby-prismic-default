@@ -1,105 +1,334 @@
-<!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
-<p align="center">
-  <a href="https://www.gatsbyjs.com">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby's default starter
-</h1>
+# Gatsby starter blog
 
-Kick off your project with this default boilerplate. This starter ships with the main Gatsby configuration files you might need to get up and running blazing fast with the blazing fast app generator for React.
+## Установить глобально Gatsby CLI
 
-_Have another more specific idea? You may want to check out our vibrant collection of [official and community-created starters](https://www.gatsbyjs.com/docs/gatsby-starters/)._
+    npm install -g gatsby-cli
 
-## 🚀 Quick start
+или
 
-1.  **Create a Gatsby site.**
+    yarn add -g gatsby-cli
 
-    Use the Gatsby CLI ([install instructions](https://www.gatsbyjs.com/docs/tutorial/part-0/#gatsby-cli)) to create a new site, specifying the default starter.
+## Скачать стартер Gatsby в связке с Prismic
 
-    ```shell
-    # create a new Gatsby site using the default starter
     gatsby new my-default-starter https://github.com/gatsbyjs/gatsby-starter-default
-    ```
 
-1.  **Start developing.**
+## Перейти в папку и запустить проект
 
-    Navigate into your new site’s directory and start it up.
-
-    ```shell
     cd my-default-starter/
     gatsby develop
-    ```
 
-1.  **Open the source code and start editing!**
+## Файл gatsby-config
 
-    Your site is now running at `http://localhost:8000`!
+Отредактировать файл gatsby-config в корневой директории. В разделе "siteMetadata" - раздел метатегов для SEO
 
-    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby Tutorial](https://www.gatsbyjs.com/docs/tutorial/part-4/#use-graphiql-to-explore-the-data-layer-and-write-graphql-queries)._
+    title - заголовок в шапке,
+    description - описание проекта,
+    siteUrl - URL по которому размещен сайт.
 
-    Open the `my-default-starter` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
+## Создание меню навигации
 
-## 🚀 Quick start (Gatsby Cloud)
+В папке src/components создаем файл menu.js cо следующим содержимым
 
-Deploy this starter with one click on [Gatsby Cloud](https://www.gatsbyjs.com/cloud/):
+    import React from "react";
+    import {Link} from "gatsby";
 
-[<img src="https://www.gatsbyjs.com/deploynow.svg" alt="Deploy to Gatsby Cloud">](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-default)
+    const Menu = () => {
+    return (
+    <div
+        style={{
+            background: '#f4f4f4',
+            paddingTop: '10px',
+        }}
+    >
+        <ul
+            style={{
+                listStyle: 'none',
+                display: 'flex',
+                justifyContent: 'space-evenly'
+            }}
+        >
+        <li>
+            <Link to={'/'}>Home</Link>
+        </li>
+        <li>
+            <Link to={'/blog'}>blog</Link>
+        </li>
+        </ul>
+    </div>
+    )
+    }
 
-## 🧐 What's inside?
+    export default Menu
 
-A quick look at the top-level files and directories you'll see in a Gatsby project.
+## Аккаунт и репозиторий в CMS Prismic.io
 
-    .
-    ├── node_modules
-    ├── src
-    ├── .gitignore
-    ├── .prettierrc
-    ├── gatsby-browser.js
-    ├── gatsby-config.js
-    ├── gatsby-node.js
-    ├── gatsby-ssr.js
-    ├── LICENSE
-    ├── package-lock.json
-    ├── package.json
-    └── README.md
+Зарегистрировать аккаунт в https://prismic.io/ по кнопке "Start building, it's free". Создать новый репозиторий по
+кнопке "With another framework" и указать Gatsby. В созданном репозитории выбрать язык контента на сайте. Создать
+кастомные типы по кнопке "Create custom type".
 
-1.  **`/node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages) are automatically installed.
+Для однотипного контента блога выбрать "Repeatable Type", указать имя, например, Post.
 
-2.  **`/src`**: This directory will contain all of the code related to what you will see on the front-end of your site (what you see in the browser) such as your site header or a page template. `src` is a convention for “source code”.
+В следующем окне перенести из правого сайдбара в "Simply drag and drop" необходимые поля
 
-3.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
+    UID (указать Field name - uid, поле необходимое для роутинга), 
+    Title (указать Field name - Title), 
+    Rich Text (указать Field name - Content, в качестве основного контента)
 
-4.  **`.prettierrc`**: This is a configuration file for [Prettier](https://prettier.io/). Prettier is a tool to help keep the formatting of your code consistent.
+После добавления полей нажать "Save" в правой части шапки CMS.
 
-5.  **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-browser/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
+Сразу можно добавить первый пост. Переходим в репозиторий
+(после кнопки "Save" по стрелке назад в левой части шапки), заполнив поля нажимаем "Save", после чего "Publish" для
+публикации.
 
-6.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-config/) for more detail).
+## Получение данных с CMS
 
-7.  **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
+Для извлечения данных установить пакет gatsby-source-prismic.
 
-8.  **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-ssr/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
+    yarn add gatsby-source-prismic --save
 
-9.  **`LICENSE`**: This Gatsby starter is licensed under the 0BSD license. This means that you can see this file as a placeholder and replace it with your own license.
+Для использования env переменных установить dotenv
 
-10. **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
+    yarn add dotenv --save-dev
 
-11. **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
+В корне проекта создаем файл .env со следующим содержимым:
 
-12. **`README.md`**: A text file containing useful reference information about your project.
+    API_KEY=<Access Token>
 
-## 🎓 Learning Gatsby
+где API_KEY - токен доступа для репозитория в prismic.io, который нужно сгенерировать в разделе репозитория "Settings" (
+внизу левого сайдбара), далее "API & Security", внизу "Generate an Access Token", указать "Application name"
+и нажать "Add this application", скопировать токен из "Access to master".
 
-Looking for more guidance? Full documentation for Gatsby lives [on the website](https://www.gatsbyjs.com/). Here are some places to start:
+## Редактировать gatsby-config.js
 
-- **For most developers, we recommend starting with our [in-depth tutorial for creating a site with Gatsby](https://www.gatsbyjs.com/tutorial/).** It starts with zero assumptions about your level of ability and walks through every step of the process.
+Вверху файла первой строкой подключить dotenv
 
-- **To dive straight into code samples, head [to our documentation](https://www.gatsbyjs.com/docs/).** In particular, check out the _Guides_, _API Reference_, and _Advanced Tutorials_ sections in the sidebar.
+    require('dotenv').config({path: '.env'})
 
-## 💫 Deploy
+В раздел "plugins" добавить
 
-[Build, Deploy, and Host On The Only Cloud Built For Gatsby](https://www.gatsbyjs.com/products/cloud/)
+        {
+            resolve: 'gatsby-source-prismic',
+                options: {
+                    repositoryName: 'pawel-develop',
+                    accessToken: `${process.env.API_KEY}`,
+                    linkResolver: ({ node, key, value}) => post => `/${post.uid}`,
+                    schemas: {
+                post: require('./custom_types/post.json')
+                }
+            }
+        }
 
-Gatsby Cloud is an end-to-end cloud platform specifically built for the Gatsby framework that combines a modern developer experience with an optimized, global edge network.
+где "repositoryName" - имя репозитория в CMS Prismic.
 
-<!-- AUTO-GENERATED-CONTENT:END -->
+## Добавить файл кастомных типов в проект
+
+В корне проекта создать папку custom_types и в ней файл post.json.
+
+Для упрощения заполнения файла post.json перейдите https://prismic.io/ в репозиторий своего проекта, выберите "Custom
+Types", далее необходимый тип, и в правом сайдбаре выберите "JSON editor", скопируйте содержимое и вставьте в post.json
+
+    {
+        "Main" : {
+            "uid" : {
+                "type" : "UID",
+                "config" : {
+                    "label" : "uid"
+                }
+            },
+            "content" : {
+                "type" : "StructuredText",
+                "config" : {
+                    "multi" : "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl",
+                    "label" : "Content"
+                }
+            },
+            "title" : {
+                "type" : "StructuredText",
+                "config" : {
+                    "single" : "heading1,heading2,heading3,heading4,heading5,heading6",
+                     "label" : "Title"
+                }
+             }
+        }
+    }
+
+## Запросы graphql
+
+Для формирования запросов graphql перейдите, при запущенном проекте в режиме разработки, по
+
+    http://localhost:8000/___graphql
+
+Откройте allPrismicPost/edges/node выберите чекбокс uid
+
+Откройте allPrismicPost/edges/node/data/content и выберите чекбокс html
+
+Откройте allPrismicPost/edges/node/data/title и выберите чекбокс text
+
+## Отображение страницы блогов
+
+В папке src/pages создайте файл blog.js
+
+    import React from "react";
+    import Layout from "../components/layout";
+    import Seo from "../components/seo";
+    import {graphql, Link} from "gatsby";
+    
+    const BlogPage = ({data}) => (
+    <Layout>
+        <Seo title={'Blog'}/>
+        <h1>Blog page</h1>
+        {data.allPrismicPost.edges.map(post => {
+            return <div key={post.node.uid}>
+                <h3>{post.node.data.title.text}</h3>
+                <br/>
+                <Link to={`${post.node.uid}`}>Открыть</Link>
+            </div>
+        })}
+    </Layout>
+    )
+    
+    export const pageQuery = graphql`
+    query PostsQuery {
+        allPrismicPost {
+            edges {
+                node {
+                    data {
+                        title {
+                            text
+                        }
+                    }
+                uid
+                }
+            }
+        }
+    }
+    `
+    
+    export default BlogPage
+
+Тело запроса graphql можно скопировать из http://localhost:8000/___graphql,
+из отмеченных ранее полей.
+
+## Генерация страниц с подробной информацией поста
+
+В папке src создайте папку "templates", в ней создайте файл "post.js" 
+с содержимым:
+
+    import React from "react";
+    import Layout from "../components/layout";
+    import {graphql, Link} from "gatsby";
+    
+    const Post = ({data}) => {
+    if (!data) return null
+    const post = data.prismicPost
+    
+        return (
+            <Layout>
+                <Link to={'/blog'}>Вернуться</Link>
+                <hr/>
+                <h1>{post.data.title.text}</h1>
+                <div dangerouslySetInnerHTML={{__html: post.data.content.html}}/>
+            </Layout>
+        )
+    }
+    export const pageQuery = graphql`
+        query PostByUid($uid: String!) {
+            prismicPost(uid: {eq: $uid}) {
+                uid
+                data {
+                    title {
+                        text
+                    }
+                    content {
+                        html
+                    }
+                }
+            }
+        }
+    `
+    export default Post
+
+## Файл gatsby-node.js
+
+В файл gatsby-node.js добавьте:
+
+    exports.createPages = async ({ actions }) => {
+        const { createPage } = actions
+            createPage({
+            path: "/using-dsg",
+            component: require.resolve("./src/templates/using-dsg.js"),
+            context: {},
+            defer: true,
+        })
+    }
+    
+    const path = require("path")
+    
+    exports.createPages = async ({graphql, actions}) => {
+        const { createPage } = actions
+    
+        const pages = await graphql(`
+        {
+            allPrismicPost {
+                nodes {
+                    id
+                    uid
+                }
+            }
+        }
+        `)
+    
+        const template = path.resolve("src/templates/post.js")
+        pages.data.allPrismicPost.nodes.forEach(post => {
+            createPage({
+                path: `/blog/${post.uid}`,
+                component: template,
+                context: {
+                    uid: post.uid,
+                }
+            })
+        })
+    }
+
+Где первый блок - пример генерации страницы, второй блок - 
+генерация страницы поста.
+
+## Размещение на хостинге "Netlify"
+
+Пройдите регистрацию и авторизацию на https://netlify.com
+
+Создайте/добавьте новый сайт нажатием на "Add new site" 
+(import an existing project), выберите соответственно GitHub, GitLab или Bitbucket, 
+пройдя авторизацию с гит, выберите репозиторий, ветку, укажите команду запуска билда.
+
+Для добавления токена доступа нажмите "Show advanced", далее "New variable"
+и в соответствии с переменой в .env заполните поля, для завершения нажмите 
+"Deploy site".
+
+
+## Вебхуки для ребилда
+
+В https://netlify.com в разделе "Sites" выберите свой сайт, 
+далее "Site settings", раздел "Build & deploy", в разделе "Build hooks"
+нажмите "Add build hook".
+
+Укажите имя вебхука и нажмите "Save". Скопируйте сгенерированную ссылку 
+вебхука, чтобы далее вставить ее в CMS Prismic.
+
+
+Перейдите в свой репозиторий в https://prismic.io/, далее раздел 
+"Settings", далее "Webhooks" и "Create a webhook". 
+Заполните необходимые поля:
+
+Name of the Webhook - название вебхука
+
+URL - URL, скопированный из "Netlify" 
+
+и нажмите "Add this webhook".
+
+
+## Заключение
+
+При каждой публикации поста в Prismic, а также при обновлении кода 
+в ветке гита, в "netlify" будет происходить ребилд, при этом 
+во время перебилда старая версия сайта будет доступна.
